@@ -191,7 +191,7 @@
 #define TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN "Move stop-loss to breakeven for all open positions on the current symbol"
 #define TRANSLATION_BUTTON_CANCEL_ORDERS "Cancel"
 #define TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS "Cancel all pending orders on the current symbol"
-#define TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER "BE/Cancel"
+#define TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER "Corner"
 #define TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER "Change the chart corner for the BE/Cancel buttons"
 #define TRANSLATION_LABEL_TRAILING_STOP "Trailing stop"
 #define TRANSLATION_LABEL_BREAKEVEN "Breakeven"

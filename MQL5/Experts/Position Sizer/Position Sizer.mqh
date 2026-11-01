@@ -26,7 +26,7 @@
 #define TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS "Cancel all pending orders on the current symbol"
 #endif
 #ifndef TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER
-#define TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER "BE/Cancel"
+#define TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER "Corner"
 #endif
 #ifndef TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER
 #define TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER "Change the chart corner for the BE/Cancel buttons"
@@ -1242,7 +1242,7 @@ bool CPositionSizeCalculator::CreateObjects()
     m_BtnTrade.ColorBackground(TradeButtonColorAdjusted);
     if (!ButtonCreate(TradingTabList, m_BtnBreakEven, first_column_start + tab_button_width + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing, y + element_height, "m_BtnBreakEven", TRANSLATION_BUTTON_BREAKEVEN, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN))                                                                                                                                                 return false;
     if (!ButtonCreate(TradingTabList, m_BtnCancelOrders, first_column_start + tab_button_width * 2 + v_spacing * 2, y, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale), y + element_height, "m_BtnCancelOrders", TRANSLATION_BUTTON_CANCEL_ORDERS, TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS))                                                                                  return false;
-    if (!ButtonCreate(TradingTabList, m_BtnQuickButtonsCorner, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing + (int)MathRound(110 * m_DPIScale), y + element_height, "m_BtnQuickButtonsCorner", TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER, TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER)) return false;
+    if (!ButtonCreate(TradingTabList, m_BtnQuickButtonsCorner, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing + (int)MathRound(90 * m_DPIScale), y + element_height, "m_BtnQuickButtonsCorner", TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER, TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER)) return false;
     UpdateQuickButtonsCornerButtonText();
 
     y += element_height + v_spacing;
