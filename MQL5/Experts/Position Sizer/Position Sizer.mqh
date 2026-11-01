@@ -25,6 +25,9 @@
 #ifndef TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS
 #define TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS "Cancel all pending orders on the current symbol"
 #endif
+#ifndef TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH
+#define TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH "Move the BE/Cancel buttons to the next chart corner"
+#endif
 #ifndef TRANSLATION_MESSAGE_NO_PENDING_ORDERS_TO_CANCEL
 #define TRANSLATION_MESSAGE_NO_PENDING_ORDERS_TO_CANCEL "No pending orders to cancel."
 #endif
@@ -60,6 +63,8 @@ private:
     CPanelList       *MainTabList, *RiskTabList, *MarginTabList, *SwapsTabList, *TradingTabList, *PersistentList; // PersisntentList can be potentially used for Strategy Tester event tracking in the future.
     CChartObjectButton OutsideCloseButtonsSwitchButton; // Switches chart corner for close buttons output.
     ENUM_BASE_CORNER OutsideCloseButtonsCorner;
+    CChartObjectButton m_OutsideBEButton, m_OutsideCancelButton, m_OutsideQuickButtonsSwitchButton;
+    ENUM_BASE_CORNER QuickButtonsCorner;
     
     // Some of the panel measurement parameters are used by more than one method:
     int              first_column_start, normal_label_width, normal_edit_width, second_column_start, element_height, third_column_start, narrow_label_width, v_spacing, multi_tp_column_start,
@@ -153,6 +158,9 @@ public:
             void     UpdateStrategyTesterTrades();
             void     CreateOutsideCloseButtonsSwitch();
             void     ProcessOutsideCloseButtonsSwitchClick();
+            void     ProcessOutsideBEButtonClick();
+            void     ProcessOutsideCancelButtonClick();
+            void     ProcessOutsideQuickButtonsSwitchClick();
             double   DPIScale() {return m_DPIScale;}
             long     MinMaxButtonId; // Stores dynamically generated id of the minmax button control.
   CChartObjectButton OutsideCloseButtons[]; // Used to store order close buttons for visual backtesting. CChartObjectButton because, unlike CButton, it supports OBJPROP_CORNER changes.
@@ -184,6 +192,9 @@ private:
     void             SeekAndDestroyDuplicatePanels();
     int              KeyBasedMultiplier();
     bool             CreateOutsideButton(CButton& Btn, int X1, int Y1, int X2, int Y2, string Name, string Text, string Tooltip = "\n");
+    void             CreateOutsideQuickButtons();
+    void             ShowOutsideQuickButtons();
+    void             HideOutsideQuickButtons();
 
     // Event handlers
     void OnEndEditEdtEntryLevel();
@@ -368,6 +379,7 @@ CPositionSizeCalculator::CPositionSizeCalculator(void)
     UpdateFileName();
     InitVariables();
     OutsideCloseButtonsCorner = CORNER_RIGHT_LOWER;
+    QuickButtonsCorner = CORNER_RIGHT_UPPER;
     TesterPanelPointer = GetPointer(this);
     PersistentList = new CPanelList;
     MainTabList = new CPanelList;
@@ -586,12 +598,17 @@ bool CPositionSizeCalculator::Create(const long chart, const string name, const 
 
     if (!CAppDialog::Create(chart, name, subwin, x1, y1, x2, y2)) return false;
     if (!CreateObjects())                                         return false;
+    CreateOutsideQuickButtons();
+    if ((m_minimized) || (sets.IsPanelMinimized)) ShowOutsideQuickButtons();
     if (sets.TakeProfitsNumber > MaxTakeProfitsNumber) MaxTakeProfitsNumber = sets.TakeProfitsNumber;
     return true;
 }
 
 void CPositionSizeCalculator::Destroy()
 {
+    m_OutsideBEButton.Delete();
+    m_OutsideCancelButton.Delete();
+    m_OutsideQuickButtonsSwitchButton.Delete();
     m_chart.Detach();
     // Call parent destroy.
     CDialog::Destroy();
@@ -2211,6 +2228,7 @@ void CPositionSizeCalculator::Minimize()
 {
     CAppDialog::Minimize();
     sets.IsPanelMinimized = true;
+    ShowOutsideQuickButtons();
     if (remember_left != -1)
     {
         Move(remember_left, remember_top);
@@ -2245,6 +2263,8 @@ void CPositionSizeCalculator::Maximize()
 
     MoveAndResize();
     if (remember_left != -1) Move(remember_left, remember_top);
+    if (m_minimized) ShowOutsideQuickButtons();
+    else HideOutsideQuickButtons();
 }
 
 void CPositionSizeCalculator::CalculateSettingsBasedOnLines()
@@ -7139,6 +7159,118 @@ void CPositionSizeCalculator::ProcessOutsideCloseButtonsSwitchClick()
         OutsideCloseButtons[i].Y_Distance(OutsideCloseButtons[i].Y_Distance() - Y_Offset);
     }
     OutsideCloseButtonsSwitchButton.Corner(OutsideCloseButtonsCorner);
+}
+
+// Creates the outside BE and Cancel buttons shown when the panel is minimized.
+void CPositionSizeCalculator::CreateOutsideQuickButtons()
+{
+    int button_width = normal_label_width;
+    int x = 0, y_offset = 0;
+    if (QuickButtonsCorner == CORNER_RIGHT_UPPER)
+    {
+        x = button_width;
+        y_offset = 0;
+    }
+    else if (QuickButtonsCorner == CORNER_RIGHT_LOWER)
+    {
+        x = button_width;
+        y_offset = element_height;
+    }
+    else if (QuickButtonsCorner == CORNER_LEFT_UPPER)
+    {
+        x = 0;
+        y_offset = 0;
+    }
+    else if (QuickButtonsCorner == CORNER_LEFT_LOWER)
+    {
+        x = 0;
+        y_offset = element_height;
+    }
+
+    string be_name = m_name + "m_BtnOutsideBE";
+    string cancel_name = m_name + "m_BtnOutsideCancel";
+    string switch_name = m_name + "m_BtnOutsideQuickButtonsSwitchButton";
+
+    ObjectDelete(0, be_name);
+    ObjectDelete(0, cancel_name);
+    ObjectDelete(0, switch_name);
+    m_OutsideBEButton.Create(0, be_name, 0, x, y_offset, button_width, element_height);
+    m_OutsideBEButton.Corner(QuickButtonsCorner);
+    if (DarkMode)
+    {
+        m_OutsideBEButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
+        m_OutsideBEButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+    }
+    m_OutsideBEButton.Color(clrBlack);
+    m_OutsideBEButton.Description(TRANSLATION_BUTTON_BREAKEVEN);
+    ObjectSetString(0, be_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN);
+
+    m_OutsideCancelButton.Create(0, cancel_name, 0, x, y_offset + element_height + 1, button_width, element_height);
+    m_OutsideCancelButton.Corner(QuickButtonsCorner);
+    if (DarkMode)
+    {
+        m_OutsideCancelButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
+        m_OutsideCancelButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+    }
+    m_OutsideCancelButton.Color(clrBlack);
+    m_OutsideCancelButton.Description(TRANSLATION_BUTTON_CANCEL_ORDERS);
+    ObjectSetString(0, cancel_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS);
+
+    m_OutsideQuickButtonsSwitchButton.Create(0, switch_name, 0, x, y_offset + 2 * (element_height + 1), element_height, element_height);
+    m_OutsideQuickButtonsSwitchButton.Corner(QuickButtonsCorner);
+    if (DarkMode)
+    {
+        m_OutsideQuickButtonsSwitchButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
+        m_OutsideQuickButtonsSwitchButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+    }
+    m_OutsideQuickButtonsSwitchButton.Color(clrBlack);
+    if (QuickButtonsCorner == CORNER_RIGHT_LOWER) m_OutsideQuickButtonsSwitchButton.Description("^");
+    else if (QuickButtonsCorner == CORNER_RIGHT_UPPER) m_OutsideQuickButtonsSwitchButton.Description("<");
+    else if (QuickButtonsCorner == CORNER_LEFT_UPPER) m_OutsideQuickButtonsSwitchButton.Description("v");
+    else if (QuickButtonsCorner == CORNER_LEFT_LOWER) m_OutsideQuickButtonsSwitchButton.Description(">");
+    ObjectSetString(0, switch_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH);
+
+    HideOutsideQuickButtons();
+}
+
+void CPositionSizeCalculator::ShowOutsideQuickButtons()
+{
+    ObjectSetInteger(0, m_name + "m_BtnOutsideBE", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
+    ObjectSetInteger(0, m_name + "m_BtnOutsideCancel", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
+    ObjectSetInteger(0, m_name + "m_BtnOutsideQuickButtonsSwitchButton", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
+    ChartRedraw();
+}
+
+void CPositionSizeCalculator::HideOutsideQuickButtons()
+{
+    ObjectSetInteger(0, m_name + "m_BtnOutsideBE", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
+    ObjectSetInteger(0, m_name + "m_BtnOutsideCancel", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
+    ObjectSetInteger(0, m_name + "m_BtnOutsideQuickButtonsSwitchButton", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
+    ChartRedraw();
+}
+
+void CPositionSizeCalculator::ProcessOutsideBEButtonClick()
+{
+    m_OutsideBEButton.State(false);
+    DoManualBreakEven();
+    ChartRedraw();
+}
+
+void CPositionSizeCalculator::ProcessOutsideCancelButtonClick()
+{
+    m_OutsideCancelButton.State(false);
+    DoCancelPendingOrders();
+    ChartRedraw();
+}
+
+void CPositionSizeCalculator::ProcessOutsideQuickButtonsSwitchClick()
+{
+    if (QuickButtonsCorner == CORNER_RIGHT_UPPER) QuickButtonsCorner = CORNER_LEFT_UPPER;
+    else if (QuickButtonsCorner == CORNER_LEFT_UPPER) QuickButtonsCorner = CORNER_LEFT_LOWER;
+    else if (QuickButtonsCorner == CORNER_LEFT_LOWER) QuickButtonsCorner = CORNER_RIGHT_LOWER;
+    else QuickButtonsCorner = CORNER_RIGHT_UPPER;
+    CreateOutsideQuickButtons();
+    ShowOutsideQuickButtons();
 }
 
 //+------------------------------------------------+

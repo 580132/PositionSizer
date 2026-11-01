@@ -746,6 +746,22 @@ void OnChartEvent(const int id,
     // Clicks on objects that cannot be processed via the class Event Map.
     if (id == CHARTEVENT_OBJECT_CLICK) 
     {
+        // Outside BE/Cancel quick buttons (shown when the panel is minimized):
+        if (sparam == ExtDialog.Name() + "m_BtnOutsideBE")
+        {
+            ExtDialog.ProcessOutsideBEButtonClick();
+            return;
+        }
+        else if (sparam == ExtDialog.Name() + "m_BtnOutsideCancel")
+        {
+            ExtDialog.ProcessOutsideCancelButtonClick();
+            return;
+        }
+        else if (sparam == ExtDialog.Name() + "m_BtnOutsideQuickButtonsSwitchButton")
+        {
+            ExtDialog.ProcessOutsideQuickButtonsSwitchClick();
+            return;
+        }
         // Strategy Tester (visual mode) support - the outside Close buttons and their corner switch:
         if ((bool)MQLInfoInteger(MQL_VISUAL_MODE))
         {
