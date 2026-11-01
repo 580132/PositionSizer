@@ -1052,6 +1052,122 @@ void DoBreakEven()
     }
 }
 
+// Moves the stop-loss of all open positions on the current symbol (optionally filtered by the Magic number) to breakeven.
+// The breakeven price covers the commission when UseCommissionToSetTPDistance is enabled, just like the automatic breakeven.
+void DoManualBreakEven()
+{
+    if (!TerminalInfoInteger(TERMINAL_CONNECTED)) return;
+
+    if (!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED))
+    {
+        Alert(TRANSLATION_MESSAGE_ALGO_TRADING_DISABLED_1);
+        return;
+    }
+
+    if (!MQLInfoInteger(MQL_TRADE_ALLOWED))
+    {
+        Alert(TRANSLATION_MESSAGE_ALGO_TRADING_DISABLED_2);
+        return;
+    }
+
+    int digits = (int)SymbolInfoInteger(SymbolForTrading, SYMBOL_DIGITS);
+
+    // Collect matching positions first, so that we do not ask for confirmation when there is nothing to modify.
+    ulong tickets[];
+    ArrayResize(tickets, 0);
+    for (int i = 0; i < PositionsTotal(); i++)
+    {
+        ulong ticket = PositionGetTicket(i);
+        if (ticket <= 0) continue;
+        if (PositionGetString(POSITION_SYMBOL) != SymbolForTrading) continue;
+        if (SymbolInfoInteger(PositionGetString(POSITION_SYMBOL), SYMBOL_TRADE_MODE) == SYMBOL_TRADE_MODE_DISABLED) continue;
+        if ((sets.MagicNumber != 0) && (PositionGetInteger(POSITION_MAGIC) != sets.MagicNumber)) continue;
+        int size = ArraySize(tickets);
+        ArrayResize(tickets, size + 1);
+        tickets[size] = ticket;
+    }
+
+    if (ArraySize(tickets) == 0)
+    {
+        Print(TRANSLATION_MESSAGE_NO_POSITIONS_TO_BREAKEVEN);
+        if (!DisableTradingSounds) PlaySound("timeout.wav");
+        return;
+    }
+
+    if ((sets.AskForConfirmation) && (MessageBox(TRANSLATION_MESSAGE_BE_CONFIRMATION, TRANSLATION_LABEL_BREAKEVEN, MB_YESNO) != IDYES)) return;
+
+    // Calculate the extra distance required to cover the commission (same logic as in DoBreakEven).
+    double extra_be_distance = 0;
+    if ((UseCommissionToSetTPDistance) && (sets.CommissionPerLot != 0))
+    {
+        CalculateCommission(); // Refreshes both the risk-side commission and CommissionReward.
+        double commission = CommissionReward;
+        if ((UnitCost_reward != 0) && (TickSize != 0))
+            extra_be_distance = commission * 2 / (UnitCost_reward / TickSize);
+    }
+
+    if (sets.MagicNumber > 0) Trade.SetExpertMagicNumber(sets.MagicNumber);
+
+    int applied = 0;
+    int failed = 0;
+
+    for (int i = 0; i < ArraySize(tickets); i++)
+    {
+        ulong ticket = tickets[i];
+        if (!PositionSelectByTicket(ticket)) continue;
+
+        ENUM_POSITION_TYPE type = (ENUM_POSITION_TYPE)PositionGetInteger(POSITION_TYPE);
+        if ((type != POSITION_TYPE_BUY) && (type != POSITION_TYPE_SELL)) continue;
+
+        double entry = PositionGetDouble(POSITION_PRICE_OPEN);
+        double current_sl = PositionGetDouble(POSITION_SL);
+        double volume = PositionGetDouble(POSITION_VOLUME);
+        double be_price;
+        if (type == POSITION_TYPE_BUY) be_price = entry + extra_be_distance;
+        else be_price = entry - extra_be_distance;
+        be_price = NormalizeDouble(be_price, digits);
+
+        // No need to modify the position if its stop-loss is already at or beyond breakeven.
+        if ((type == POSITION_TYPE_BUY) && (current_sl != 0) && (current_sl >= be_price)) continue;
+        if ((type == POSITION_TYPE_SELL) && (current_sl != 0) && (current_sl <= be_price)) continue;
+
+        // A BUY stop-loss must be below the current Bid; a SELL stop-loss must be above the current Ask.
+        // The broker's stops level is not checked here - an invalid stop will be reported by PositionModify().
+        if (type == POSITION_TYPE_BUY)
+        {
+            if (be_price >= SymbolInfoDouble(SymbolForTrading, SYMBOL_BID))
+            {
+                Print(TRANSLATION_MESSAGE_STOPLOSS_PROBLEM + " - " + SymbolForTrading + " " + TRANSLATION_MESSAGE_BUY + " #" + IntegerToString(ticket) + ": " + TRANSLATION_MESSAGE_BUY + " " + TRANSLATION_LABEL_STOPLOSS + " >= Bid.");
+                failed++;
+                continue;
+            }
+        }
+        else if (be_price <= SymbolInfoDouble(SymbolForTrading, SYMBOL_ASK))
+        {
+            Print(TRANSLATION_MESSAGE_STOPLOSS_PROBLEM + " - " + SymbolForTrading + " " + TRANSLATION_MESSAGE_SELL + " #" + IntegerToString(ticket) + ": " + TRANSLATION_MESSAGE_SELL + " " + TRANSLATION_LABEL_STOPLOSS + " <= Ask.");
+            failed++;
+            continue;
+        }
+
+        double tp = PositionGetDouble(POSITION_TP);
+        string direction = (type == POSITION_TYPE_BUY) ? TRANSLATION_MESSAGE_BUY : TRANSLATION_MESSAGE_SELL;
+
+        if (!Trade.PositionModify(ticket, be_price, tp))
+        {
+            if (type == POSITION_TYPE_BUY) Print(TRANSLATION_MESSAGE_POSITIONMODIFY_FAILED_BUY_BE + ": " + Trade.ResultRetcodeDescription() + ".");
+            else Print(TRANSLATION_MESSAGE_POSITIONMODIFY_FAILED_SELL_BE + ": " + Trade.ResultRetcodeDescription() + ".");
+            failed++;
+        }
+        else
+        {
+            Print(TRANSLATION_MESSAGE_BE_APPLIED + " - " + SymbolForTrading + " " + direction + " #" + IntegerToString(ticket) + " " + TRANSLATION_LABEL_POSITION_SIZE + " = " + DoubleToString(volume, LotStep_digits) + ", " + TRANSLATION_LABEL_ENTRY + " = " + DoubleToString(entry, digits) + ", " + TRANSLATION_MESSAGE_SL_WAS_MOVED_FROM + " " + DoubleToString(current_sl, digits) + " " + TRANSLATION_MESSAGE_SL_WAS_MOVED_TO + " " + DoubleToString(be_price, digits) + ".");
+            applied++;
+        }
+    }
+
+    if (!DisableTradingSounds) PlaySound((failed > 0) && (applied == 0) ? "timeout.wav" : "ok.wav");
+}
+
 // Returns existing volume: positions + orders combined.
 // all_symbols = true - for all symbols.
 // all_symbols = false - for the current symbol only.

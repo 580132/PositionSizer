@@ -6,10 +6,24 @@
 #include "Defines.mqh"
 #include <ChartObjects\ChartObjectsTxtControls.mqh>
 
+// Fallbacks for translations that do not define the manual breakeven button strings.
+#ifndef TRANSLATION_BUTTON_BREAKEVEN
+#define TRANSLATION_BUTTON_BREAKEVEN "BE"
+#endif
+#ifndef TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN
+#define TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN "Move stop-loss to breakeven for all open positions on the current symbol"
+#endif
+#ifndef TRANSLATION_MESSAGE_NO_POSITIONS_TO_BREAKEVEN
+#define TRANSLATION_MESSAGE_NO_POSITIONS_TO_BREAKEVEN "No open positions to move to breakeven."
+#endif
+#ifndef TRANSLATION_MESSAGE_BE_CONFIRMATION
+#define TRANSLATION_MESSAGE_BE_CONFIRMATION "Move stop-loss to breakeven for all matching open positions?"
+#endif
+
 class CPositionSizeCalculator : public CAppDialog
 {
 private:
-    CButton          m_BtnTabMain, m_BtnTabRisk, m_BtnTabMargin, m_BtnTabSwaps, m_BtnTabTrading, m_BtnOrderType, m_BtnAccount, m_BtnLines, m_BtnStopLoss, m_BtnTakeProfit, m_BtnEntry, m_BtnATRTimeframe, m_BtnCommissionType, m_BtnMaxPS, m_BtnTrade, m_BtnTPsInward, m_BtnTPsOutward, m_BtnTradingTPShare, m_BtnQuickRisk1, m_BtnQuickRisk2, m_BtnEntryIncrease, m_BtnEntryDecrease, m_BtnStopLossIncrease, m_BtnStopLossDecrease, m_BtnTakeProfitIncrease, m_BtnTakeProfitDecrease, m_BtnStopPriceIncrease, m_BtnStopPriceDecrease, m_BtnTakeProfitsNumberAdd, m_BtnTakeProfitsNumberRemove, m_BtnMainTrade, m_BtnSpreadAdjustmentSL, m_BtnSpreadAdjustmentTP;
+    CButton          m_BtnTabMain, m_BtnTabRisk, m_BtnTabMargin, m_BtnTabSwaps, m_BtnTabTrading, m_BtnOrderType, m_BtnAccount, m_BtnLines, m_BtnStopLoss, m_BtnTakeProfit, m_BtnEntry, m_BtnATRTimeframe, m_BtnCommissionType, m_BtnMaxPS, m_BtnTrade, m_BtnBreakEven, m_BtnTPsInward, m_BtnTPsOutward, m_BtnTradingTPShare, m_BtnQuickRisk1, m_BtnQuickRisk2, m_BtnEntryIncrease, m_BtnEntryDecrease, m_BtnStopLossIncrease, m_BtnStopLossDecrease, m_BtnTakeProfitIncrease, m_BtnTakeProfitDecrease, m_BtnStopPriceIncrease, m_BtnStopPriceDecrease, m_BtnTakeProfitsNumberAdd, m_BtnTakeProfitsNumberRemove, m_BtnMainTrade, m_BtnSpreadAdjustmentSL, m_BtnSpreadAdjustmentTP;
     CCheckBox        m_ChkIgnoreOrdersWithoutSL, m_ChkIgnoreOrdersWithoutTP, m_ChkDisableTradingWhenLinesAreHidden, m_ChkSubtractPositions, m_ChkSubtractPendingOrders, m_ChkDoNotApplyStopLoss, m_ChkDoNotApplyTakeProfit, m_ChkAskForConfirmation, m_ChkCommentAutoSuffix, m_ChkTPLockedOnSL;
     CEdit            m_EdtEntryLevel, m_EdtSL, m_EdtSLAdjusted, m_EdtTP, m_EdtTPAdjusted, m_EdtStopPrice, m_EdtAccount, m_EdtCommissionSize, m_EdtRiskPIn, m_EdtRiskPRes, m_EdtRiskMIn, m_EdtRiskMRes, m_EdtReward1, m_EdtReward2, m_EdtRR1, m_EdtRR2, m_EdtPosSize, m_EdtPointValue, m_EdtATRPeriod, m_EdtATRMultiplierSL, m_EdtATRMultiplierTP, m_EdtCurRiskM, m_EdtCurRiskP, m_EdtPotRiskM, m_EdtPotRiskP, m_EdtCurProfitM, m_EdtCurProfitP, m_EdtPotProfitM, m_EdtPotProfitP, m_EdtCurL, m_EdtPotL, m_EdtCurrentRRR, m_EdtPotentialRRR, m_EdtPosMargin, m_EdtUsedMargin, m_EdtFreeMargin, m_EdtCustomLeverage, m_EdtMaxPositionSizeByMargin, m_EdtSwapsType, m_EdtSwapsTripleDay, m_EdtSwapsNominalLong, m_EdtSwapsNominalShort, m_EdtSwapsDailyLongLot, m_EdtSwapsDailyShortLot, m_EdtSwapsDailyLongPS, m_EdtSwapsDailyShortPS, m_EdtSwapsYearlyLongLot, m_EdtSwapsYearlyShortLot, m_EdtSwapsYearlyLongPS, m_EdtSwapsYearlyShortPS, m_EdtMagicNumber, m_EdtExpiry, m_EdtCommentary, m_EdtMaxSlippage, m_EdtMaxSpread, m_EdtMaxEntrySLDistance, m_EdtMinEntrySLDistance, m_EdtTrailingStopPoints, m_EdtBreakEvenPoints, m_EdtMaxNumberOfTradesTotal, m_EdtMaxNumberOfTradesPerSymbol, m_EdtMaxPositionSizeTotal, m_EdtMaxPositionSizePerSymbol, m_EdtMaxRiskTotal, m_EdtMaxRiskPerSymbol, m_EdtMaxRiskPercentage, m_EdtTPMultiplier, m_EdtMarginUtilizedCurrent, m_EdtMarginUtilizedPosition, m_EdtMarginUtilizedFuture, m_EdtMUBStartingBalance, m_EdtMaxMarginPercTotal, m_EdtMaxMarginPercPerSymbol, m_EdtMaxMarginPerc;
     CLabel           m_LblEntryLevel, m_LblEntryWarning, m_LblSL, m_LblSLWarning, m_LblStopPrice, m_LblStopPriceWarning, m_LblOrderType, m_LblCommissionSize, m_LblCommissionAsterisk, m_LblAdditionalFundsAsterisk, m_LblInput, m_LblResult, m_LblRisk, m_LblRiskM, m_LblReward, m_LblRR, m_LblPosSize, m_LblPointValue, m_LblATRPeriod, m_LblATRMultiplierSL, m_LblATRMultiplierTP, m_LblATRValue, m_LblATRTimeframe, m_LblCurrentRiskMoney, m_LblCurrentRiskPerc, m_LblCurrentProfitMoney, m_LblCurrentProfitPerc, m_LblPotentialRiskMoney, m_LblPotentialRiskPerc, m_LblPotentialProfitMoney, m_LblPotentialProfitPerc, m_LblCurrentLots, m_LblCurrentRRR, m_LblPotentialLots, m_LblPotentialRRR, m_LblCurrentPortfolio, m_LblPotentialPortfolio, m_LblPosMargin, m_LblUsedMargin, m_LblFreeMargin, m_LblCustomLeverage, m_LblAccLeverage, m_LblSymbolLeverage, m_LblMaxPositionSizeByMargin, m_LblSwapsType, m_LblSwapsTripleDay, m_LblSwapsLong, m_LblSwapsShort, m_LblSwapsNominal, m_LblSwapsDaily, m_LblSwapsYearly, m_LblSwapsPerLotDaily, m_LblSwapsPerPSDaily, m_LblSwapsPerLotYearly, m_LblSwapsPerPSYearly, m_LblMagicNumber, m_LblExpiry, m_LblMinutes, m_LblCommentary, m_LblTradingPoints, m_LblMaxSlippage, m_LblMaxSpread, m_LblMaxEntrySLDistance, m_LblMinEntrySLDistance, m_LblTradingLots, m_LblURL, m_LblTradingTP, m_LblTrailingStop, m_LblBreakEven, m_LblMaxNumberOfTrades, m_LblMaxNumberOfTradesTotal, m_LblMaxNumberOfTradesPerSymbol, m_LblMaxPositionSize, m_LblMaxPositionSizeTotal, m_LblMaxPositionSizePerSymbol, m_LblMaxRisk, m_LblMaxRiskTotal, m_LblMaxRiskPerSymbol, m_LblMaxRiskPercentage, m_LblIncludeOrders, m_LblIncludeSymbols, m_LblIncludeDirections, m_LblMarginUtilizedPerc, m_LblMarginUtilizedPercCurrent, m_LblMarginUtilizedPercPosition, m_LblMarginUtilizedPercFuture, m_LblMarginUtilizedBase, m_LblMarginUtilizedBaseCurrency, m_LblMaxMarginPerc, m_LblMaxMarginPercTotal, m_LblMaxMarginPercPerSymbol, m_LblMaxMarginPercFuse;
@@ -228,6 +242,7 @@ private:
     void OnClickBtnEntry();
     void OnClickBtnATRTimeframe();
     void OnClickBtnTrade();
+    void OnClickBtnBreakEven();
     void OnClickBtnQuickRisk1();
     void OnClickBtnQuickRisk2();
 };
@@ -320,6 +335,7 @@ ON_EVENT(ON_CLICK, m_BtnTakeProfit, OnClickBtnTakeProfit)
 ON_EVENT(ON_CLICK, m_BtnEntry, OnClickBtnEntry)
 if (ShowATROptions) ON_EVENT(ON_CLICK, m_BtnATRTimeframe, OnClickBtnATRTimeframe)
 ON_EVENT(ON_CLICK, m_BtnTrade, OnClickBtnTrade)
+ON_EVENT(ON_CLICK, m_BtnBreakEven, OnClickBtnBreakEven)
 if (QuickRisk1 > 0) ON_EVENT(ON_CLICK, m_BtnQuickRisk1, OnClickBtnQuickRisk1)
 if (QuickRisk2 > 0) ON_EVENT(ON_CLICK, m_BtnQuickRisk2, OnClickBtnQuickRisk2)
 if ((AdditionalTradeButtons == ADDITIONAL_TRADE_BUTTONS_MAIN) || (AdditionalTradeButtons == ADDITIONAL_TRADE_BUTTONS_BOTH)) ON_EVENT(ON_CLICK, m_BtnMainTrade, OnClickBtnTrade)
@@ -1186,10 +1202,14 @@ bool CPositionSizeCalculator::CreateObjects()
 
     if (!ButtonCreate(TradingTabList, m_BtnTrade, first_column_start, y, first_column_start + tab_button_width, y + element_height, "m_BtnTrade", TRANSLATION_BUTTON_TRADE))                                                                                                                                                                                                                                                          return false;
     m_BtnTrade.ColorBackground(TradeButtonColorAdjusted);
-    if (!LabelCreate(TradingTabList, m_LblTrailingStop, first_column_start + tab_button_width + v_spacing * 2, y, first_column_start + v_spacing + tab_button_width + normal_edit_width, y + element_height, "m_LblTrailingStop", TRANSLATION_LABEL_TRAILING_STOP + ":"))                                                                                                                                                             return false;
-    if (!EditCreate(TradingTabList, m_EdtTrailingStopPoints, first_column_start + v_spacing * 2 + tab_button_width + normal_edit_width, y, first_column_start + v_spacing * 2 + tab_button_width * 2 + normal_edit_width, y + element_height, "m_EdtTrailingStopPoints", "0"))                                                                                                                                                        return false;
-    if (!LabelCreate(TradingTabList, m_LblBreakEven, first_column_start + v_spacing * 5 + tab_button_width * 2 + normal_edit_width, y, first_column_start + v_spacing * 3 + tab_button_width * 2 + normal_edit_width + narrow_edit_width, y + element_height, "m_LblBreakEven", TRANSLATION_LABEL_BREAKEVEN + ":"))                                                                                                                   return false;
-    if (!EditCreate(TradingTabList, m_EdtBreakEvenPoints, first_column_start + v_spacing * 4 + tab_button_width * 2 + normal_edit_width + narrow_edit_width, y, first_column_start + v_spacing * 4 + tab_button_width * 3 + normal_edit_width + narrow_edit_width, y + element_height, "m_EdtBreakEvenPoints", "0"))                                                                                                                  return false;
+    if (!ButtonCreate(TradingTabList, m_BtnBreakEven, first_column_start + tab_button_width + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing, y + element_height, "m_BtnBreakEven", TRANSLATION_BUTTON_BREAKEVEN, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN))                                                                                                                                                 return false;
+
+    y += element_height + v_spacing;
+
+    if (!LabelCreate(TradingTabList, m_LblTrailingStop, first_column_start, y, first_column_start + normal_label_width, y + element_height, "m_LblTrailingStop", TRANSLATION_LABEL_TRAILING_STOP + ":"))                                                                                                                                                                                                                       return false;
+    if (!EditCreate(TradingTabList, m_EdtTrailingStopPoints, first_column_start + normal_label_width, y, first_column_start + normal_label_width + tab_button_width, y + element_height, "m_EdtTrailingStopPoints", "0"))                                                                                                                                                                                                         return false;
+    if (!LabelCreate(TradingTabList, m_LblBreakEven, first_column_start + normal_label_width + tab_button_width + v_spacing, y, first_column_start + normal_label_width + tab_button_width + v_spacing + narrow_edit_width, y + element_height, "m_LblBreakEven", TRANSLATION_LABEL_BREAKEVEN + ":"))                                                                                                                            return false;
+    if (!EditCreate(TradingTabList, m_EdtBreakEvenPoints, first_column_start + normal_label_width + tab_button_width + v_spacing + narrow_edit_width, y, first_column_start + normal_label_width + tab_button_width * 2 + v_spacing + narrow_edit_width, y + element_height, "m_EdtBreakEvenPoints", "0"))                                                                                                                         return false;
 
     y += element_height + v_spacing;
 
@@ -3461,6 +3481,12 @@ void CPositionSizeCalculator::OnClickBtnMaxPS()
 void CPositionSizeCalculator::OnClickBtnTrade()
 {
     DoTrade();
+}
+
+// Move the stop-loss of all matching open positions to breakeven.
+void CPositionSizeCalculator::OnClickBtnBreakEven()
+{
+    DoManualBreakEven();
 }
 
 // Each TP is calculated to be equally spaced between main TP and Entry.

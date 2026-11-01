@@ -187,6 +187,8 @@
 
 // Trading tab
 #define TRANSLATION_BUTTON_TRADE "Trade"
+#define TRANSLATION_BUTTON_BREAKEVEN "BE"
+#define TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN "Move stop-loss to breakeven for all open positions on the current symbol"
 #define TRANSLATION_LABEL_TRAILING_STOP "Trailing stop"
 #define TRANSLATION_LABEL_BREAKEVEN "Breakeven"
 #define TRANSLATION_LABEL_MAGIC_NUMBER "Magic number"
@@ -345,6 +347,8 @@
 #define TRANSLATION_MESSAGE_POSITIONMODIFY_FAILED_SELL_BE "PositionModify failed for Sell breakeven"
 #define TRANSLATION_MESSAGE_BE_APPLIED "Breakeven was applied to position"
 #define TRANSLATION_MESSAGE_BE_FOR "Breakeven for "
+#define TRANSLATION_MESSAGE_NO_POSITIONS_TO_BREAKEVEN "No open positions to move to breakeven."
+#define TRANSLATION_MESSAGE_BE_CONFIRMATION "Move stop-loss to breakeven for all matching open positions?"
 #define TRANSLATION_MESSAGE_ERROR_SETTING_TIMER "Error setting timer"
 #define TRANSLATION_MESSAGE_FAILED_DELETE_INI "Failed to delete the PS panel's .ini file"
 #define TRANSLATION_MESSAGE_CANNOT_CONVERT "Cannot convert"
