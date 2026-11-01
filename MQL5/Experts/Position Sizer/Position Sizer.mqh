@@ -7211,30 +7211,20 @@ void CPositionSizeCalculator::CreateOutsideQuickButtons()
     ObjectDelete(0, be_name);
     ObjectDelete(0, cancel_name);
 
-    color be_bg = C'46,139,87';
-    color be_border = C'34,109,68';
-    color cancel_bg = C'178,34,34';
-    color cancel_border = C'128,24,24';
-    if (DarkMode)
-    {
-        be_bg = C'56,159,107';
-        cancel_bg = C'198,54,54';
-    }
-
     m_OutsideBEButton.Create(0, be_name, 0, x_be, y, be_width, element_height);
     m_OutsideBEButton.Corner(sets.QuickButtonsCorner);
-    m_OutsideBEButton.BackColor(be_bg);
-    m_OutsideBEButton.BorderColor(be_border);
-    m_OutsideBEButton.Color(clrWhite);
+    m_OutsideBEButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
+    if (DarkMode) m_OutsideBEButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+    m_OutsideBEButton.Color(clrBlack);
     m_OutsideBEButton.FontSize((int)MathRound(9 * m_DPIScale));
     m_OutsideBEButton.Description(TRANSLATION_BUTTON_BREAKEVEN);
     ObjectSetString(0, be_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN);
 
     m_OutsideCancelButton.Create(0, cancel_name, 0, x_cancel, y, cancel_width, element_height);
     m_OutsideCancelButton.Corner(sets.QuickButtonsCorner);
-    m_OutsideCancelButton.BackColor(cancel_bg);
-    m_OutsideCancelButton.BorderColor(cancel_border);
-    m_OutsideCancelButton.Color(clrWhite);
+    m_OutsideCancelButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
+    if (DarkMode) m_OutsideCancelButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+    m_OutsideCancelButton.Color(clrBlack);
     m_OutsideCancelButton.FontSize((int)MathRound(9 * m_DPIScale));
     m_OutsideCancelButton.Description(TRANSLATION_BUTTON_CANCEL_ORDERS);
     ObjectSetString(0, cancel_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS);
