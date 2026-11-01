@@ -422,7 +422,7 @@ void CPositionSizeCalculator::InitVariables()
     remember_top = -1;
     MaxTakeProfitsNumber = 1;
     MinMaxButtonId = -1;
-    sets.QuickButtonsCorner = CORNER_RIGHT_UPPER;
+    sets.QuickButtonsCorner = CORNER_RIGHT_LOWER;
     ChartWidth = ChartGetInteger(0, CHART_WIDTH_IN_PIXELS);
     CheckboxOnFile = "";
     CheckboxOffFile = "";
