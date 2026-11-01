@@ -757,11 +757,6 @@ void OnChartEvent(const int id,
             ExtDialog.ProcessOutsideCancelButtonClick();
             return;
         }
-        else if (sparam == ExtDialog.Name() + "m_BtnOutsideQuickButtonsSwitchButton")
-        {
-            ExtDialog.ProcessOutsideQuickButtonsSwitchClick();
-            return;
-        }
         // Strategy Tester (visual mode) support - the outside Close buttons and their corner switch:
         if ((bool)MQLInfoInteger(MQL_VISUAL_MODE))
         {

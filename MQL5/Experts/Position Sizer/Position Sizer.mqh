@@ -25,8 +25,11 @@
 #ifndef TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS
 #define TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS "Cancel all pending orders on the current symbol"
 #endif
-#ifndef TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH
-#define TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH "Move the BE/Cancel buttons to the next chart corner"
+#ifndef TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER
+#define TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER "BE/Cancel"
+#endif
+#ifndef TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER
+#define TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER "Change the chart corner for the BE/Cancel buttons"
 #endif
 #ifndef TRANSLATION_MESSAGE_NO_PENDING_ORDERS_TO_CANCEL
 #define TRANSLATION_MESSAGE_NO_PENDING_ORDERS_TO_CANCEL "No pending orders to cancel."
@@ -41,7 +44,7 @@
 class CPositionSizeCalculator : public CAppDialog
 {
 private:
-    CButton          m_BtnTabMain, m_BtnTabRisk, m_BtnTabMargin, m_BtnTabSwaps, m_BtnTabTrading, m_BtnOrderType, m_BtnAccount, m_BtnLines, m_BtnStopLoss, m_BtnTakeProfit, m_BtnEntry, m_BtnATRTimeframe, m_BtnCommissionType, m_BtnMaxPS, m_BtnTrade, m_BtnBreakEven, m_BtnCancelOrders, m_BtnTPsInward, m_BtnTPsOutward, m_BtnTradingTPShare, m_BtnQuickRisk1, m_BtnQuickRisk2, m_BtnEntryIncrease, m_BtnEntryDecrease, m_BtnStopLossIncrease, m_BtnStopLossDecrease, m_BtnTakeProfitIncrease, m_BtnTakeProfitDecrease, m_BtnStopPriceIncrease, m_BtnStopPriceDecrease, m_BtnTakeProfitsNumberAdd, m_BtnTakeProfitsNumberRemove, m_BtnMainTrade, m_BtnSpreadAdjustmentSL, m_BtnSpreadAdjustmentTP;
+    CButton          m_BtnTabMain, m_BtnTabRisk, m_BtnTabMargin, m_BtnTabSwaps, m_BtnTabTrading, m_BtnOrderType, m_BtnAccount, m_BtnLines, m_BtnStopLoss, m_BtnTakeProfit, m_BtnEntry, m_BtnATRTimeframe, m_BtnCommissionType, m_BtnMaxPS, m_BtnTrade, m_BtnBreakEven, m_BtnCancelOrders, m_BtnQuickButtonsCorner, m_BtnTPsInward, m_BtnTPsOutward, m_BtnTradingTPShare, m_BtnQuickRisk1, m_BtnQuickRisk2, m_BtnEntryIncrease, m_BtnEntryDecrease, m_BtnStopLossIncrease, m_BtnStopLossDecrease, m_BtnTakeProfitIncrease, m_BtnTakeProfitDecrease, m_BtnStopPriceIncrease, m_BtnStopPriceDecrease, m_BtnTakeProfitsNumberAdd, m_BtnTakeProfitsNumberRemove, m_BtnMainTrade, m_BtnSpreadAdjustmentSL, m_BtnSpreadAdjustmentTP;
     CCheckBox        m_ChkIgnoreOrdersWithoutSL, m_ChkIgnoreOrdersWithoutTP, m_ChkDisableTradingWhenLinesAreHidden, m_ChkSubtractPositions, m_ChkSubtractPendingOrders, m_ChkDoNotApplyStopLoss, m_ChkDoNotApplyTakeProfit, m_ChkAskForConfirmation, m_ChkCommentAutoSuffix, m_ChkTPLockedOnSL;
     CEdit            m_EdtEntryLevel, m_EdtSL, m_EdtSLAdjusted, m_EdtTP, m_EdtTPAdjusted, m_EdtStopPrice, m_EdtAccount, m_EdtCommissionSize, m_EdtRiskPIn, m_EdtRiskPRes, m_EdtRiskMIn, m_EdtRiskMRes, m_EdtReward1, m_EdtReward2, m_EdtRR1, m_EdtRR2, m_EdtPosSize, m_EdtPointValue, m_EdtATRPeriod, m_EdtATRMultiplierSL, m_EdtATRMultiplierTP, m_EdtCurRiskM, m_EdtCurRiskP, m_EdtPotRiskM, m_EdtPotRiskP, m_EdtCurProfitM, m_EdtCurProfitP, m_EdtPotProfitM, m_EdtPotProfitP, m_EdtCurL, m_EdtPotL, m_EdtCurrentRRR, m_EdtPotentialRRR, m_EdtPosMargin, m_EdtUsedMargin, m_EdtFreeMargin, m_EdtCustomLeverage, m_EdtMaxPositionSizeByMargin, m_EdtSwapsType, m_EdtSwapsTripleDay, m_EdtSwapsNominalLong, m_EdtSwapsNominalShort, m_EdtSwapsDailyLongLot, m_EdtSwapsDailyShortLot, m_EdtSwapsDailyLongPS, m_EdtSwapsDailyShortPS, m_EdtSwapsYearlyLongLot, m_EdtSwapsYearlyShortLot, m_EdtSwapsYearlyLongPS, m_EdtSwapsYearlyShortPS, m_EdtMagicNumber, m_EdtExpiry, m_EdtCommentary, m_EdtMaxSlippage, m_EdtMaxSpread, m_EdtMaxEntrySLDistance, m_EdtMinEntrySLDistance, m_EdtTrailingStopPoints, m_EdtBreakEvenPoints, m_EdtMaxNumberOfTradesTotal, m_EdtMaxNumberOfTradesPerSymbol, m_EdtMaxPositionSizeTotal, m_EdtMaxPositionSizePerSymbol, m_EdtMaxRiskTotal, m_EdtMaxRiskPerSymbol, m_EdtMaxRiskPercentage, m_EdtTPMultiplier, m_EdtMarginUtilizedCurrent, m_EdtMarginUtilizedPosition, m_EdtMarginUtilizedFuture, m_EdtMUBStartingBalance, m_EdtMaxMarginPercTotal, m_EdtMaxMarginPercPerSymbol, m_EdtMaxMarginPerc;
     CLabel           m_LblEntryLevel, m_LblEntryWarning, m_LblSL, m_LblSLWarning, m_LblStopPrice, m_LblStopPriceWarning, m_LblOrderType, m_LblCommissionSize, m_LblCommissionAsterisk, m_LblAdditionalFundsAsterisk, m_LblInput, m_LblResult, m_LblRisk, m_LblRiskM, m_LblReward, m_LblRR, m_LblPosSize, m_LblPointValue, m_LblATRPeriod, m_LblATRMultiplierSL, m_LblATRMultiplierTP, m_LblATRValue, m_LblATRTimeframe, m_LblCurrentRiskMoney, m_LblCurrentRiskPerc, m_LblCurrentProfitMoney, m_LblCurrentProfitPerc, m_LblPotentialRiskMoney, m_LblPotentialRiskPerc, m_LblPotentialProfitMoney, m_LblPotentialProfitPerc, m_LblCurrentLots, m_LblCurrentRRR, m_LblPotentialLots, m_LblPotentialRRR, m_LblCurrentPortfolio, m_LblPotentialPortfolio, m_LblPosMargin, m_LblUsedMargin, m_LblFreeMargin, m_LblCustomLeverage, m_LblAccLeverage, m_LblSymbolLeverage, m_LblMaxPositionSizeByMargin, m_LblSwapsType, m_LblSwapsTripleDay, m_LblSwapsLong, m_LblSwapsShort, m_LblSwapsNominal, m_LblSwapsDaily, m_LblSwapsYearly, m_LblSwapsPerLotDaily, m_LblSwapsPerPSDaily, m_LblSwapsPerLotYearly, m_LblSwapsPerPSYearly, m_LblMagicNumber, m_LblExpiry, m_LblMinutes, m_LblCommentary, m_LblTradingPoints, m_LblMaxSlippage, m_LblMaxSpread, m_LblMaxEntrySLDistance, m_LblMinEntrySLDistance, m_LblTradingLots, m_LblURL, m_LblTradingTP, m_LblTrailingStop, m_LblBreakEven, m_LblMaxNumberOfTrades, m_LblMaxNumberOfTradesTotal, m_LblMaxNumberOfTradesPerSymbol, m_LblMaxPositionSize, m_LblMaxPositionSizeTotal, m_LblMaxPositionSizePerSymbol, m_LblMaxRisk, m_LblMaxRiskTotal, m_LblMaxRiskPerSymbol, m_LblMaxRiskPercentage, m_LblIncludeOrders, m_LblIncludeSymbols, m_LblIncludeDirections, m_LblMarginUtilizedPerc, m_LblMarginUtilizedPercCurrent, m_LblMarginUtilizedPercPosition, m_LblMarginUtilizedPercFuture, m_LblMarginUtilizedBase, m_LblMarginUtilizedBaseCurrency, m_LblMaxMarginPerc, m_LblMaxMarginPercTotal, m_LblMaxMarginPercPerSymbol, m_LblMaxMarginPercFuse;
@@ -63,8 +66,7 @@ private:
     CPanelList       *MainTabList, *RiskTabList, *MarginTabList, *SwapsTabList, *TradingTabList, *PersistentList; // PersisntentList can be potentially used for Strategy Tester event tracking in the future.
     CChartObjectButton OutsideCloseButtonsSwitchButton; // Switches chart corner for close buttons output.
     ENUM_BASE_CORNER OutsideCloseButtonsCorner;
-    CChartObjectButton m_OutsideBEButton, m_OutsideCancelButton, m_OutsideQuickButtonsSwitchButton;
-    ENUM_BASE_CORNER QuickButtonsCorner;
+    CChartObjectButton m_OutsideBEButton, m_OutsideCancelButton;
     
     // Some of the panel measurement parameters are used by more than one method:
     int              first_column_start, normal_label_width, normal_edit_width, second_column_start, element_height, third_column_start, narrow_label_width, v_spacing, multi_tp_column_start,
@@ -160,7 +162,6 @@ public:
             void     ProcessOutsideCloseButtonsSwitchClick();
             void     ProcessOutsideBEButtonClick();
             void     ProcessOutsideCancelButtonClick();
-            void     ProcessOutsideQuickButtonsSwitchClick();
             double   DPIScale() {return m_DPIScale;}
             long     MinMaxButtonId; // Stores dynamically generated id of the minmax button control.
   CChartObjectButton OutsideCloseButtons[]; // Used to store order close buttons for visual backtesting. CChartObjectButton because, unlike CButton, it supports OBJPROP_CORNER changes.
@@ -195,6 +196,8 @@ private:
     void             CreateOutsideQuickButtons();
     void             ShowOutsideQuickButtons();
     void             HideOutsideQuickButtons();
+    void             UpdateQuickButtonsCornerButtonText();
+    string           QuickButtonsCornerString(ENUM_BASE_CORNER corner);
 
     // Event handlers
     void OnEndEditEdtEntryLevel();
@@ -270,6 +273,7 @@ private:
     void OnClickBtnTrade();
     void OnClickBtnBreakEven();
     void OnClickBtnCancelOrders();
+    void OnClickBtnQuickButtonsCorner();
     void OnClickBtnQuickRisk1();
     void OnClickBtnQuickRisk2();
 };
@@ -364,6 +368,7 @@ if (ShowATROptions) ON_EVENT(ON_CLICK, m_BtnATRTimeframe, OnClickBtnATRTimeframe
 ON_EVENT(ON_CLICK, m_BtnTrade, OnClickBtnTrade)
 ON_EVENT(ON_CLICK, m_BtnBreakEven, OnClickBtnBreakEven)
 ON_EVENT(ON_CLICK, m_BtnCancelOrders, OnClickBtnCancelOrders)
+ON_EVENT(ON_CLICK, m_BtnQuickButtonsCorner, OnClickBtnQuickButtonsCorner)
 if (QuickRisk1 > 0) ON_EVENT(ON_CLICK, m_BtnQuickRisk1, OnClickBtnQuickRisk1)
 if (QuickRisk2 > 0) ON_EVENT(ON_CLICK, m_BtnQuickRisk2, OnClickBtnQuickRisk2)
 if ((AdditionalTradeButtons == ADDITIONAL_TRADE_BUTTONS_MAIN) || (AdditionalTradeButtons == ADDITIONAL_TRADE_BUTTONS_BOTH)) ON_EVENT(ON_CLICK, m_BtnMainTrade, OnClickBtnTrade)
@@ -379,7 +384,6 @@ CPositionSizeCalculator::CPositionSizeCalculator(void)
     UpdateFileName();
     InitVariables();
     OutsideCloseButtonsCorner = CORNER_RIGHT_LOWER;
-    QuickButtonsCorner = CORNER_RIGHT_UPPER;
     TesterPanelPointer = GetPointer(this);
     PersistentList = new CPanelList;
     MainTabList = new CPanelList;
@@ -418,6 +422,7 @@ void CPositionSizeCalculator::InitVariables()
     remember_top = -1;
     MaxTakeProfitsNumber = 1;
     MinMaxButtonId = -1;
+    sets.QuickButtonsCorner = CORNER_RIGHT_UPPER;
     ChartWidth = ChartGetInteger(0, CHART_WIDTH_IN_PIXELS);
     CheckboxOnFile = "";
     CheckboxOffFile = "";
@@ -608,7 +613,6 @@ void CPositionSizeCalculator::Destroy()
 {
     m_OutsideBEButton.Delete();
     m_OutsideCancelButton.Delete();
-    m_OutsideQuickButtonsSwitchButton.Delete();
     m_chart.Detach();
     // Call parent destroy.
     CDialog::Destroy();
@@ -1238,6 +1242,8 @@ bool CPositionSizeCalculator::CreateObjects()
     m_BtnTrade.ColorBackground(TradeButtonColorAdjusted);
     if (!ButtonCreate(TradingTabList, m_BtnBreakEven, first_column_start + tab_button_width + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing, y + element_height, "m_BtnBreakEven", TRANSLATION_BUTTON_BREAKEVEN, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN))                                                                                                                                                 return false;
     if (!ButtonCreate(TradingTabList, m_BtnCancelOrders, first_column_start + tab_button_width * 2 + v_spacing * 2, y, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale), y + element_height, "m_BtnCancelOrders", TRANSLATION_BUTTON_CANCEL_ORDERS, TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS))                                                                                  return false;
+    if (!ButtonCreate(TradingTabList, m_BtnQuickButtonsCorner, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing, y, first_column_start + tab_button_width * 2 + v_spacing * 2 + (int)MathRound(60 * m_DPIScale) + v_spacing + (int)MathRound(110 * m_DPIScale), y + element_height, "m_BtnQuickButtonsCorner", TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER, TRANSLATION_TOOLTIP_BUTTON_QUICK_BUTTONS_CORNER)) return false;
+    UpdateQuickButtonsCornerButtonText();
 
     y += element_height + v_spacing;
 
@@ -3533,6 +3539,18 @@ void CPositionSizeCalculator::OnClickBtnCancelOrders()
     DoCancelPendingOrders();
 }
 
+// Cycle the chart corner used by the outside BE/Cancel buttons.
+void CPositionSizeCalculator::OnClickBtnQuickButtonsCorner()
+{
+    if (sets.QuickButtonsCorner == CORNER_RIGHT_UPPER) sets.QuickButtonsCorner = CORNER_LEFT_UPPER;
+    else if (sets.QuickButtonsCorner == CORNER_LEFT_UPPER) sets.QuickButtonsCorner = CORNER_LEFT_LOWER;
+    else if (sets.QuickButtonsCorner == CORNER_LEFT_LOWER) sets.QuickButtonsCorner = CORNER_RIGHT_LOWER;
+    else sets.QuickButtonsCorner = CORNER_RIGHT_UPPER;
+    UpdateQuickButtonsCornerButtonText();
+    CreateOutsideQuickButtons();
+    if ((m_minimized) || (sets.IsPanelMinimized)) ShowOutsideQuickButtons();
+}
+
 // Each TP is calculated to be equally spaced between main TP and Entry.
 void CPositionSizeCalculator::OnClickBtnTPsInward()
 {
@@ -5506,6 +5524,8 @@ bool CPositionSizeCalculator::SaveSettingsOnDisk(string symbol = "")
     FileWrite(fh, DoubleToString(sets.MaxMarginPercPerSymbol, 2));
     FileWrite(fh, "IsPanelMinimized");
     FileWrite(fh, IntegerToString(sets.IsPanelMinimized));
+    FileWrite(fh, "QuickButtonsCorner");
+    FileWrite(fh, IntegerToString((int)sets.QuickButtonsCorner));
     FileWrite(fh, "TPLockedOnSL");
     FileWrite(fh, IntegerToString(sets.TPLockedOnSL));
     FileWrite(fh, "ShareVolumeMode");
@@ -5869,6 +5889,8 @@ bool CPositionSizeCalculator::LoadSettingsFromDisk()
             sets.MaxMarginPercPerSymbol = StringToDouble(var_content);
         else if (var_name == "IsPanelMinimized")
             sets.IsPanelMinimized = (bool)StringToInteger(var_content);
+        else if (var_name == "QuickButtonsCorner")
+            sets.QuickButtonsCorner = (ENUM_BASE_CORNER)StringToInteger(var_content);
         else if (var_name == "TPLockedOnSL")
             sets.TPLockedOnSL = (bool)StringToInteger(var_content);
         else if (var_name == "ShareVolumeMode")
@@ -7164,71 +7186,58 @@ void CPositionSizeCalculator::ProcessOutsideCloseButtonsSwitchClick()
 // Creates the outside BE and Cancel buttons shown when the panel is minimized.
 void CPositionSizeCalculator::CreateOutsideQuickButtons()
 {
-    int button_width = normal_label_width;
-    int x = 0, y_offset = 0;
-    if (QuickButtonsCorner == CORNER_RIGHT_UPPER)
+    int margin = (int)MathRound(5 * m_DPIScale);
+    int gap = (int)MathRound(6 * m_DPIScale);
+    int be_width = (int)MathRound(70 * m_DPIScale);
+    int cancel_width = (int)MathRound(100 * m_DPIScale);
+
+    int x_be, x_cancel, y;
+    if ((sets.QuickButtonsCorner == CORNER_RIGHT_UPPER) || (sets.QuickButtonsCorner == CORNER_RIGHT_LOWER))
     {
-        x = button_width;
-        y_offset = 0;
+        x_cancel = cancel_width + margin;
+        x_be = cancel_width + margin + gap + be_width;
     }
-    else if (QuickButtonsCorner == CORNER_RIGHT_LOWER)
+    else
     {
-        x = button_width;
-        y_offset = element_height;
+        x_be = margin;
+        x_cancel = margin + be_width + gap;
     }
-    else if (QuickButtonsCorner == CORNER_LEFT_UPPER)
-    {
-        x = 0;
-        y_offset = 0;
-    }
-    else if (QuickButtonsCorner == CORNER_LEFT_LOWER)
-    {
-        x = 0;
-        y_offset = element_height;
-    }
+    if ((sets.QuickButtonsCorner == CORNER_LEFT_LOWER) || (sets.QuickButtonsCorner == CORNER_RIGHT_LOWER)) y = element_height + margin;
+    else y = margin;
 
     string be_name = m_name + "m_BtnOutsideBE";
     string cancel_name = m_name + "m_BtnOutsideCancel";
-    string switch_name = m_name + "m_BtnOutsideQuickButtonsSwitchButton";
 
     ObjectDelete(0, be_name);
     ObjectDelete(0, cancel_name);
-    ObjectDelete(0, switch_name);
-    m_OutsideBEButton.Create(0, be_name, 0, x, y_offset, button_width, element_height);
-    m_OutsideBEButton.Corner(QuickButtonsCorner);
+
+    color be_bg = C'46,139,87';
+    color be_border = C'34,109,68';
+    color cancel_bg = C'178,34,34';
+    color cancel_border = C'128,24,24';
     if (DarkMode)
     {
-        m_OutsideBEButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
-        m_OutsideBEButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
+        be_bg = C'56,159,107';
+        cancel_bg = C'198,54,54';
     }
-    m_OutsideBEButton.Color(clrBlack);
+
+    m_OutsideBEButton.Create(0, be_name, 0, x_be, y, be_width, element_height);
+    m_OutsideBEButton.Corner(sets.QuickButtonsCorner);
+    m_OutsideBEButton.BackColor(be_bg);
+    m_OutsideBEButton.BorderColor(be_border);
+    m_OutsideBEButton.Color(clrWhite);
+    m_OutsideBEButton.FontSize((int)MathRound(9 * m_DPIScale));
     m_OutsideBEButton.Description(TRANSLATION_BUTTON_BREAKEVEN);
     ObjectSetString(0, be_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_BREAKEVEN);
 
-    m_OutsideCancelButton.Create(0, cancel_name, 0, x, y_offset + element_height + 1, button_width, element_height);
-    m_OutsideCancelButton.Corner(QuickButtonsCorner);
-    if (DarkMode)
-    {
-        m_OutsideCancelButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
-        m_OutsideCancelButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
-    }
-    m_OutsideCancelButton.Color(clrBlack);
+    m_OutsideCancelButton.Create(0, cancel_name, 0, x_cancel, y, cancel_width, element_height);
+    m_OutsideCancelButton.Corner(sets.QuickButtonsCorner);
+    m_OutsideCancelButton.BackColor(cancel_bg);
+    m_OutsideCancelButton.BorderColor(cancel_border);
+    m_OutsideCancelButton.Color(clrWhite);
+    m_OutsideCancelButton.FontSize((int)MathRound(9 * m_DPIScale));
     m_OutsideCancelButton.Description(TRANSLATION_BUTTON_CANCEL_ORDERS);
     ObjectSetString(0, cancel_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_BUTTON_CANCEL_ORDERS);
-
-    m_OutsideQuickButtonsSwitchButton.Create(0, switch_name, 0, x, y_offset + 2 * (element_height + 1), element_height, element_height);
-    m_OutsideQuickButtonsSwitchButton.Corner(QuickButtonsCorner);
-    if (DarkMode)
-    {
-        m_OutsideQuickButtonsSwitchButton.BackColor(CONTROLS_BUTTON_COLOR_ENABLE);
-        m_OutsideQuickButtonsSwitchButton.BorderColor(DARKMODE_CONTROL_BORDER_COLOR);
-    }
-    m_OutsideQuickButtonsSwitchButton.Color(clrBlack);
-    if (QuickButtonsCorner == CORNER_RIGHT_LOWER) m_OutsideQuickButtonsSwitchButton.Description("^");
-    else if (QuickButtonsCorner == CORNER_RIGHT_UPPER) m_OutsideQuickButtonsSwitchButton.Description("<");
-    else if (QuickButtonsCorner == CORNER_LEFT_UPPER) m_OutsideQuickButtonsSwitchButton.Description("v");
-    else if (QuickButtonsCorner == CORNER_LEFT_LOWER) m_OutsideQuickButtonsSwitchButton.Description(">");
-    ObjectSetString(0, switch_name, OBJPROP_TOOLTIP, TRANSLATION_TOOLTIP_OUTSIDE_QUICK_BUTTONS_SWITCH);
 
     HideOutsideQuickButtons();
 }
@@ -7237,7 +7246,6 @@ void CPositionSizeCalculator::ShowOutsideQuickButtons()
 {
     ObjectSetInteger(0, m_name + "m_BtnOutsideBE", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
     ObjectSetInteger(0, m_name + "m_BtnOutsideCancel", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
-    ObjectSetInteger(0, m_name + "m_BtnOutsideQuickButtonsSwitchButton", OBJPROP_TIMEFRAMES, OBJ_ALL_PERIODS);
     ChartRedraw();
 }
 
@@ -7245,7 +7253,6 @@ void CPositionSizeCalculator::HideOutsideQuickButtons()
 {
     ObjectSetInteger(0, m_name + "m_BtnOutsideBE", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
     ObjectSetInteger(0, m_name + "m_BtnOutsideCancel", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
-    ObjectSetInteger(0, m_name + "m_BtnOutsideQuickButtonsSwitchButton", OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
     ChartRedraw();
 }
 
@@ -7263,14 +7270,18 @@ void CPositionSizeCalculator::ProcessOutsideCancelButtonClick()
     ChartRedraw();
 }
 
-void CPositionSizeCalculator::ProcessOutsideQuickButtonsSwitchClick()
+string CPositionSizeCalculator::QuickButtonsCornerString(ENUM_BASE_CORNER corner)
 {
-    if (QuickButtonsCorner == CORNER_RIGHT_UPPER) QuickButtonsCorner = CORNER_LEFT_UPPER;
-    else if (QuickButtonsCorner == CORNER_LEFT_UPPER) QuickButtonsCorner = CORNER_LEFT_LOWER;
-    else if (QuickButtonsCorner == CORNER_LEFT_LOWER) QuickButtonsCorner = CORNER_RIGHT_LOWER;
-    else QuickButtonsCorner = CORNER_RIGHT_UPPER;
-    CreateOutsideQuickButtons();
-    ShowOutsideQuickButtons();
+    if (corner == CORNER_RIGHT_UPPER) return "RU";
+    if (corner == CORNER_LEFT_UPPER) return "LU";
+    if (corner == CORNER_LEFT_LOWER) return "LL";
+    if (corner == CORNER_RIGHT_LOWER) return "RL";
+    return "";
+}
+
+void CPositionSizeCalculator::UpdateQuickButtonsCornerButtonText()
+{
+    m_BtnQuickButtonsCorner.Text(TRANSLATION_BUTTON_QUICK_BUTTONS_CORNER + ": " + QuickButtonsCornerString(sets.QuickButtonsCorner));
 }
 
 //+------------------------------------------------+

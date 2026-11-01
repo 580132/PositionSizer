@@ -275,6 +275,7 @@ struct Settings
     bool WasSelectedAdditionalTakeProfitLine[];
     // Panel states:
     bool IsPanelMinimized;
+    ENUM_BASE_CORNER QuickButtonsCorner;
     bool TPLockedOnSL;
     VOLUME_SHARE_MODE ShareVolumeMode;
     bool TemplateChanged;
