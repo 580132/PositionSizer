@@ -1168,6 +1168,78 @@ void DoManualBreakEven()
     if (!DisableTradingSounds) PlaySound((failed > 0) && (applied == 0) ? "timeout.wav" : "ok.wav");
 }
 
+// Cancels all pending orders on the current symbol (optionally filtered by the Magic number).
+void DoCancelPendingOrders()
+{
+    if (!TerminalInfoInteger(TERMINAL_CONNECTED)) return;
+
+    if (!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED))
+    {
+        Alert(TRANSLATION_MESSAGE_ALGO_TRADING_DISABLED_1);
+        return;
+    }
+
+    if (!MQLInfoInteger(MQL_TRADE_ALLOWED))
+    {
+        Alert(TRANSLATION_MESSAGE_ALGO_TRADING_DISABLED_2);
+        return;
+    }
+
+    // Collect matching pending orders first, so that we do not ask for confirmation when there is nothing to cancel.
+    ulong tickets[];
+    ArrayResize(tickets, 0);
+    for (int i = 0; i < OrdersTotal(); i++)
+    {
+        ulong ticket = OrderGetTicket(i);
+        if (ticket <= 0) continue;
+        if (!OrderSelect(ticket)) continue;
+        if (OrderGetString(ORDER_SYMBOL) != SymbolForTrading) continue;
+        if ((sets.MagicNumber != 0) && (OrderGetInteger(ORDER_MAGIC) != sets.MagicNumber)) continue;
+        int size = ArraySize(tickets);
+        ArrayResize(tickets, size + 1);
+        tickets[size] = ticket;
+    }
+
+    if (ArraySize(tickets) == 0)
+    {
+        Print(TRANSLATION_MESSAGE_NO_PENDING_ORDERS_TO_CANCEL);
+        if (!DisableTradingSounds) PlaySound("timeout.wav");
+        return;
+    }
+
+    if ((sets.AskForConfirmation) && (MessageBox(TRANSLATION_MESSAGE_CANCEL_ORDERS_CONFIRMATION, TRANSLATION_BUTTON_CANCEL_ORDERS, MB_YESNO) != IDYES)) return;
+
+    if (sets.MagicNumber > 0) Trade.SetExpertMagicNumber(sets.MagicNumber);
+
+    int cancelled = 0;
+    int failed = 0;
+
+    for (int i = 0; i < ArraySize(tickets); i++)
+    {
+        ulong ticket = tickets[i];
+        if (!OrderSelect(ticket)) continue;
+
+        string symbol = OrderGetString(ORDER_SYMBOL);
+        ENUM_ORDER_TYPE type = (ENUM_ORDER_TYPE)OrderGetInteger(ORDER_TYPE);
+        double volume = OrderGetDouble(ORDER_VOLUME_CURRENT);
+        double price = OrderGetDouble(ORDER_PRICE_OPEN);
+        int digits = (int)SymbolInfoInteger(symbol, SYMBOL_DIGITS);
+
+        if (!Trade.OrderDelete(ticket))
+        {
+            Print(TRANSLATION_MESSAGE_ORDERDELETE_FAILED + ": " + Trade.ResultRetcodeDescription() + ".");
+            failed++;
+        }
+        else
+        {
+            Print(TRANSLATION_MESSAGE_ORDER_CANCELED + " - " + symbol + " " + OrderTypeToString(type) + " #" + IntegerToString(ticket) + ", " + TRANSLATION_LABEL_POSITION_SIZE + " = " + DoubleToString(volume, LotStep_digits) + ", " + TRANSLATION_LABEL_ENTRY + " = " + DoubleToString(price, digits) + ".");
+            cancelled++;
+        }
+    }
+
+    if (!DisableTradingSounds) PlaySound((failed > 0) && (cancelled == 0) ? "timeout.wav" : "ok.wav");
+}
+
 // Returns existing volume: positions + orders combined.
 // all_symbols = true - for all symbols.
 // all_symbols = false - for the current symbol only.
